@@ -5,6 +5,7 @@ from typing import Optional, Tuple
 from threading import Lock
 import time
 from pathlib import Path
+import cv2
 
 class CameraManager:
     """
@@ -145,10 +146,9 @@ class CameraManager:
             timestamp = time.strftime("%Y%m%d-%H%M%S")
             filepath = self.save_path / f"capture_{timestamp}.jpg"
             
-            # Salvar usando request
-            request = self.camera.capture_request()
-            request.save("main", str(filepath))
-            request.release()
+            # Salvar imagem usando OpenCV
+            cv2.imwrite(str(filepath), cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+            self.logger.info(f"Imagem salva em: {filepath}")
             return True
             
         except Exception as e:
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     
     # Exemplo básico
-    with CameraManager(resolution=(1280, 720)) as cam:
+    with CameraManager(resolution=(1280, 720), save_path="capturas") as cam:
         # Capturar uma imagem
         image = cam.capture_image()
         if image is not None:
