@@ -96,7 +96,7 @@ def main():
                                 Som Detectado: {detected_sound}
                                 """
                 
-                    send_alert(bot, mensagem, image_path)
+                    bot.send_alert(mensagem, image_path)
 
                 # Pausar 1 segundo antes de iniciar uma nova gravação
                 time.sleep(1)
